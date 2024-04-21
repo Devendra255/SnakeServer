@@ -16,6 +16,16 @@ var velocityY = 0;
 var speed = 200;
 var score = 0;
 
+let dataName = [];
+async function request() {
+    const response = await fetch('/api');
+    const data = await response.json();
+    dataName.push(data.name);
+    dataName.push(data.hiscore);
+}
+var playerName = '';
+var hiscore = '';
+
 var snakeBody = [];
 
 //food
@@ -25,6 +35,8 @@ var foodY;
 var gameOver = false;
 
 window.onload = function() {
+    request();
+    console.log(dataName);
     board = document.getElementById("board");
     board.height = rows * blockSize;
     board.width = cols * blockSize;
@@ -38,6 +50,14 @@ window.onload = function() {
 
 function update() {
     if (gameOver) {
+        // fetch("/score", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({ 
+        //         name: name,
+        //         score: score })});
         return;
     }
 
@@ -100,6 +120,8 @@ function changeDirection(e) {
         velocityX = 1;
         velocityY = 0;
     }
+    document.getElementById("name").innerHTML = dataName[0];
+    document.getElementById("hiscore").innerHTML = dataName[1];
 }
 
 
