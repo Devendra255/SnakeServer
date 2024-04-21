@@ -62,8 +62,16 @@ app.post('/score', async (req, res) => {
         name: req.body.name,
         score: req.body.score
     }
-    await LogInCollection.updateOne({ name: req.body.name }, { $set: { hiscore: req.body.score } })
-    res.send("updated")
+    console.log(data)
+    const checking = await LogInCollection.findOne({ name: data.name })
+    if (data.score > checking.hiscore) {
+        await LogInCollection.updateOne({ name: data.name }, { $set: { hiscore: data.score } })
+        app.get('/api', function(req, res){
+            res.json(checking);
+            console.log("Data sended")
+        });
+        console.log("data updated")
+    }
 })
 
 app.listen(port, () => console.log(`Example app listening on port http://localhost:${port}`))

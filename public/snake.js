@@ -35,8 +35,6 @@ var foodY;
 var gameOver = false;
 
 window.onload = function() {
-    request();
-    console.log(dataName);
     board = document.getElementById("board");
     board.height = rows * blockSize;
     board.width = cols * blockSize;
@@ -45,19 +43,21 @@ window.onload = function() {
     placeFood();
     document.addEventListener("keyup", changeDirection);
     // update();
+    request();
+    console.log(dataName);
     setInterval(update, speed);
 }
 
 function update() {
     if (gameOver) {
-        // fetch("/score", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({ 
-        //         name: name,
-        //         score: score })});
+        fetch("/score", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ 
+                name: playerName,
+                score: score })});
         return;
     }
 
@@ -92,13 +92,15 @@ function update() {
     //game over conditions
     if (snakeX < 0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize) {
         gameOver = true;
-        if(!alert("Game Over")) document.location.reload();
+        alert("Game Over");
+        request();
     }
 
     for (let i = 0; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
             gameOver = true;
-            if(!alert("Game Over")) document.location.reload();
+            alert("Game Over");
+            request();
         }
     }
 }
@@ -120,8 +122,8 @@ function changeDirection(e) {
         velocityX = 1;
         velocityY = 0;
     }
-    document.getElementById("name").innerHTML = dataName[0];
-    document.getElementById("hiscore").innerHTML = dataName[1];
+    playerName = document.getElementById("name").innerHTML = dataName[0];
+    hiscore = document.getElementById("hiscore").innerHTML = dataName[1];
 }
 
 
