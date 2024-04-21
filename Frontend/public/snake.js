@@ -14,6 +14,7 @@ var velocityX = 0;
 var velocityY = 0;
 
 var speed = 200;
+var score = 0;
 
 var snakeBody = [];
 
@@ -48,6 +49,7 @@ function update() {
 
     if (snakeX == foodX && snakeY == foodY) {
         snakeBody.push([foodX, foodY]);
+        score = document.getElementById("score").innerHTML = score + 1;
         placeFood();
     }
 
@@ -58,10 +60,11 @@ function update() {
         snakeBody[0] = [snakeX, snakeY];
     }
 
-    context.fillStyle="lime";
+    context.fillStyle="limeGreen";
     snakeX += velocityX * blockSize;
     snakeY += velocityY * blockSize;
     context.fillRect(snakeX, snakeY, blockSize, blockSize);
+    context.fillStyle="lime";
     for (let i = 0; i < snakeBody.length; i++) {
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize);
     }
@@ -69,13 +72,13 @@ function update() {
     //game over conditions
     if (snakeX < 0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize) {
         gameOver = true;
-        alert("Game Over");
+        if(!alert("Game Over")) document.location.reload();
     }
 
     for (let i = 0; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
             gameOver = true;
-            alert("Game Over");
+            if(!alert("Game Over")) document.location.reload();
         }
     }
 }
